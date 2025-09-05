@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from functions import z_n, n_subspaces
 
 '''
-Computes the trace weighted by Weingarten coefficients for fixed permutation element
+Computes the trace for fixed permutation element
 '''
 
 Nt = 5   # number of t evaluated
