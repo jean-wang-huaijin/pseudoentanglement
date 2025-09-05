@@ -1,5 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
+from sympy.utilities.iterables import partitions
 
 def z_n(n, k):
 
@@ -25,7 +24,7 @@ def gaussian_coeff(n,k,q):
 
 def n_subspaces(t,s,m,β):
 
-    c_1 = 2**((m-β)*(s-β))
+    c_1 = 2**((m-β)*(s-β)+m*(m-1)/2)
     c_2 = gaussian_coeff(t-1-s,m-β,2)
     c_3 = gaussian_coeff(s,β,2)
     c_4 = 1
@@ -49,5 +48,18 @@ def prod_exp(t,n):
 
     return sum
 
+def cycle_classes_St(t, c):
+    """
+    List all conjugacy classes in S_t with exactly c cycles.
+    Each class is represented as a tuple of cycle lengths.
+    """
 
+    classes = []
+    for p,parts in partitions(t, size=True):
+        if p == c:
+            cycle_type = []
+            for length, count in parts.items():
+                cycle_type.extend([length]*count)
+            classes.append(tuple(sorted(cycle_type, reverse=True)))
+    return classes
 

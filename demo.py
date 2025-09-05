@@ -7,7 +7,7 @@ Computes the trace weighted by Weingarten coefficients for fixed permutation ele
 '''
 
 Nt = 5   # number of t evaluated
-Ns = 5    # number of s evaluated       
+Ns = 5    # number of s evaluated, s = t-c(π) counts the number of swaps in π      
 tstart = 5
 tstep = 2
 traces = np.zeros((Ns, Nt))
@@ -22,7 +22,7 @@ for s in range(1,Ns+1):
 
         for m in range(1,t):
             for β in range(0, min(m, s) + 1):
-                sum += n_subspaces(t,s,m,β) * d**(t-m+2*β) * 2**(m*(m+1)/2-1)
+                sum += n_subspaces(t,s,m,β) * d**(t-m+2*β)
 
         div = 1/z_n(n,t)
         traces[s-1,j] = sum*div
