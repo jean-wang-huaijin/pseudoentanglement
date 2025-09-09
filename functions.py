@@ -1,4 +1,6 @@
 from sympy.utilities.iterables import partitions
+from sympy.combinatorics import Permutation
+from haarpy import weingarten_element
 
 def z_n(n, k):
 
@@ -63,3 +65,60 @@ def cycle_classes_St(t, c):
             classes.append(tuple(sorted(cycle_type, reverse=True)))
     return classes
 
+
+
+def wg_weighted_trace(n,t):
+    d = 2**n
+    sqrtd = int(2**(n/2))
+
+    pi = Permutation.random(t)
+    pi_inv = ~pi
+    sigma = Permutation.random(t)
+    sigma_2 = Permutation.random(t)
+    tau = Permutation.random(t)
+
+    prod1 = pi*sigma
+    prod2 = pi_inv*tau*sigma_2
+
+    wg1 = weingarten_element(prod1, t, sqrtd)
+    wg2 = weingarten_element(prod2, t, sqrtd)
+
+    s = pi.length()
+    sum = 0
+    
+    for m in range(1,t):
+        for β in range(0, min(m, s) + 1):
+            sum += n_subspaces(t,s,m,β) * d**(2*(t-m+β)-s)
+
+    return sum*wg1*wg2
+
+
+def wg_weighted_trace_diff(n,l,t,zn,zl):
+    d_n = 2**n
+    d_l = 2**l
+    sqrtd = int(2**(n/2))
+
+    pi = Permutation.random(t)
+    pi_inv = ~pi
+    sigma = Permutation.random(t)
+    sigma_2 = Permutation.random(t)
+    tau = Permutation.random(t)
+
+    prod1 = pi*sigma
+    prod2 = pi_inv*tau*sigma_2
+
+    wg1 = weingarten_element(prod1, t, sqrtd)
+    wg2 = weingarten_element(prod2, t, sqrtd)
+
+    s = pi.length()
+    sum = 0
+    sum_log = 0
+    
+    for m in range(1,t):
+        for β in range(0, min(m, s) + 1):
+            sum += n_subspaces(t,s,m,β) * d_n**(2*(t-m+β)-s)
+            sum_log += n_subspaces(t,s,m,β) * d_l**(2*(t-m+β)-s)
+
+    diff = wg1*wg2*(sum/zn - sum_log/zl)
+
+    return diff
