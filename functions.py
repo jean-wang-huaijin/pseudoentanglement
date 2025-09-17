@@ -67,7 +67,7 @@ def cycle_classes_St(t, c):
 
 
 
-def wg_weighted_trace(n,t):
+def wg_weighted_trace(n,t,zn):
     d = 2**n
     sqrtd = int(2**(n/2))
 
@@ -90,7 +90,7 @@ def wg_weighted_trace(n,t):
         for β in range(0, min(m, s) + 1):
             sum += n_subspaces(t,s,m,β) * d**(2*(t-m+β)-s)
 
-    return sum*wg1*wg2
+    return sum*wg1*wg2/zn
 
 
 def wg_weighted_trace_diff(n,l,t,zn,zl):
@@ -119,6 +119,27 @@ def wg_weighted_trace_diff(n,l,t,zn,zl):
             sum += n_subspaces(t,s,m,β) * d_n**(2*(t-m+β)-s)
             sum_log += n_subspaces(t,s,m,β) * d_l**(2*(t-m+β)-s)
 
-    diff = wg1*wg2*(sum/zn - sum_log/zl)
-
+    # diff = wg1*wg2*(sum/zn - sum_log/zl)
+    diff = wg1*wg2*sum/zn
     return diff
+
+
+def wg_haar(n,t,zn):
+    d = 2**n
+
+    sigma = Permutation.random(t)
+    sigma_inv = ~sigma
+    tau = Permutation.random(t)
+
+    prod = tau*sigma_inv
+
+    wg = weingarten_element(prod, t, d)
+
+    s = sigma.length()
+    sum = 0
+    
+    for m in range(1,t):
+        for β in range(0, min(m, s) + 1):
+            sum += n_subspaces(t,s,m,β) * d**(t-m-s+2β)
+
+    return sum*wg/zn
