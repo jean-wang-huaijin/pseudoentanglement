@@ -140,6 +140,6 @@ def wg_haar(n,t,zn):
     
     for m in range(1,t):
         for β in range(0, min(m, s) + 1):
-            sum += n_subspaces(t,s,m,β) * d**(t-m-s+2β)
+            sum += n_subspaces(t,s,m,β) * d**(t-m-s+2*β)
 
     return sum*wg/zn
