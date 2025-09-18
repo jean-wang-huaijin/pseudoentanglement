@@ -77,6 +77,12 @@ def wg_weighted_trace(n,t,zn):
     sigma_2 = Permutation.random(t)
     tau = Permutation.random(t)
 
+    cycle1 = sigma.cycle_structure
+    trR1 = cycle1.get(1, 0)
+    cycle2 = sigma_2.cycle_structure
+    trR2 = cycle2.get(1, 0)
+
+
     prod1 = pi*sigma
     prod2 = pi_inv*tau*sigma_2
 
@@ -89,8 +95,9 @@ def wg_weighted_trace(n,t,zn):
     for m in range(1,t):
         for β in range(0, min(m, s) + 1):
             sum += n_subspaces(t,s,m,β) * d**(2*(t-m+β)-s)
+    
 
-    return sum*wg1*wg2/zn
+    return trR1*trR2*sum*wg1*wg2/zn
 
 
 def wg_weighted_trace_diff(n,l,t,zn,zl):
@@ -119,8 +126,13 @@ def wg_weighted_trace_diff(n,l,t,zn,zl):
             sum += n_subspaces(t,s,m,β) * d_n**(2*(t-m+β)-s)
             sum_log += n_subspaces(t,s,m,β) * d_l**(2*(t-m+β)-s)
 
-    # diff = wg1*wg2*(sum/zn - sum_log/zl)
-    diff = wg1*wg2*sum/zn
+    cycle1 = sigma.cycle_structure
+    trR1 = cycle1.get(1, 0)
+    cycle2 = sigma_2.cycle_structure
+    trR2 = cycle2.get(1, 0)
+
+    diff = trR1*trR2*wg1*wg2*(sum/zn - sum_log/zl)
+
     return diff
 
 
@@ -142,4 +154,7 @@ def wg_haar(n,t,zn):
         for β in range(0, min(m, s) + 1):
             sum += n_subspaces(t,s,m,β) * d**(t-m-s+2*β)
 
-    return sum*wg/zn
+    cycle = sigma.cycle_structure
+    trR = cycle.get(1, 0)
+
+    return trR*sum*wg/zn
